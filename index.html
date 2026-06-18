@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>构史模拟器</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部导航栏 -->
+    <header id="header">
+      <h1 class="game-title">🏰构史模拟器</h1>
+      <div id="round-info" class="hidden">
+        <span class="round-label">第</span>
+        <span id="round-num">1</span>
+        <span class="round-label">回合</span>
+      </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main id="main-content">
+      <!-- 阶段0: 启动画面 -->
+      <div id="screen-start" class="screen">
+        <div class="start-container">
+          <div class="emblem">📜</div>
+          <h2>欢迎来到构史模拟器</h2>
+          <p class="subtitle">在架空的历史长河中，书写属于你的文明篇章</p>
+          <div class="api-config" id="api-config">
+            <div class="api-key-section">
+              <input type="password" id="api-key-input" placeholder="输入 DeepSeek API Key (sk-...)" class="api-key-field">
+              <p class="hint">🔒 API Key 不会保存</p>
+            </div>
+          </div>
+          <button id="btn-start" class="btn-primary" disabled>开始构史</button>
+          <p id="config-status" class="hint"></p>
+        </div>
+      </div>
+
+      <!-- 阶段1: 选择国家 -->
+      <div id="screen-select" class="screen hidden">
+        <h2 class="phase-title">选择你的文明</h2>
+        <p class="phase-desc">AI正在生成五个国家的历史背景...</p>
+        <div id="countries-container" class="countries-grid">
+          <div class="loading-spinner">⏳</div>
+        </div>
+      </div>
+
+      <!-- 阶段2: 选取事件 -->
+      <div id="screen-events" class="screen hidden">
+        <h2 class="phase-title">选取历史事件</h2>
+        <p class="phase-desc">从6个事件中选择4个，拖拽排序以决定发生顺序</p>
+        <div class="events-layout">
+          <div class="events-pool">
+            <h3>📋 可选事件 (<span id="pool-count">6</span>)</h3>
+            <div id="events-pool-list" class="event-list"></div>
+          </div>
+          <div class="events-selected">
+            <h3>✅ 已选事件 (<span id="selected-count">0</span>/4)</h3>
+            <div id="events-selected-list" class="event-list"></div>
+          </div>
+        </div>
+        <button id="btn-confirm-events" class="btn-primary" disabled>确认选择，生成历史</button>
+      </div>
+
+      <!-- 阶段3: 历史叙述 -->
+      <div id="screen-history" class="screen hidden">
+        <h2 class="phase-title">史书记载</h2>
+        <div id="history-scroll" class="history-scroll">
+          <div id="history-text" class="history-text"></div>
+        </div>
+        <div id="stats-summary" class="stats-summary"></div>
+        <div class="history-buttons">
+          <button id="btn-show-end" class="btn-primary hidden">查看结局</button>
+          <button id="btn-next-round" class="btn-primary">进入下一回合</button>
+        </div>
+      </div>
+
+      <!-- 阶段4: 游戏结束 -->
+      <div id="screen-end" class="screen hidden">
+        <div id="end-content" class="end-container"></div>
+      </div>
+
+      <!-- 底部横排面板：列国志 + 历史纪要 -->
+      <div id="bottom-panel" class="hidden">
+        <section class="panel-section">
+          <h3 class="panel-title">🌍 列国志</h3>
+          <div id="countries-row" class="countries-h-row"></div>
+        </section>
+        <section class="panel-section">
+          <h3 class="panel-title">📖 历史纪要</h3>
+          <div id="history-row" class="history-h-row"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 加载遮罩 -->
+    <div id="loading-overlay" class="hidden">
+      <div class="loading-content">
+        <div class="loading-spinner">⏳</div>
+        <p id="loading-text">AI正在思考...</p>
+        <button id="btn-retry" class="btn-retry hidden" onclick="GameController.retry()">🔄 重试</button>
+      </div>
+    </div>
+
+    <!-- Toast提示 -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="js/ai.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
